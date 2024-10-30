@@ -153,27 +153,27 @@ class Data:
 
     #统计句子中的字和标签
     def build_alphabet(self, input_file):
-        in_lines = open(input_file,'r',encoding="utf-8").readlines()
+        in_lines = open(input_file,'r',encoding="utf-8").readlines()  # 读取文件
         seqlen = 0
-        for idx in range(len(in_lines)):
+        for idx in range(len(in_lines)):  # 遍历每行
             line = in_lines[idx]
-            if len(line) > 2:
+            if len(line) > 2:  #检查长度以保证有效数据
                 pairs = line.strip().split()
                 word = pairs[0]
                 if self.number_normalized:
                     word = normalize_word(word)
                 label = pairs[-1]
-                self.label_alphabet.add(label)
+                self.label_alphabet.add(label)    #分别将词汇和label加入字母表中
                 self.word_alphabet.add(word)
-                if idx < len(in_lines) - 1 and len(in_lines[idx+1]) > 2:
+                if idx < len(in_lines) - 1 and len(in_lines[idx+1]) > 2:   #检查双词
                     biword = word + in_lines[idx+1].strip().split()[0]
                 else:
                     biword = word + NULLKEY
                 self.biword_alphabet.add(biword)
                 # biword_index = self.biword_alphabet.get_index(biword)
-                self.biword_count[biword] = self.biword_count.get(biword,0) + 1
+                self.biword_count[biword] = self.biword_count.get(biword,0) + 1   # 对双词计数
                 for char in word:
-                    self.char_alphabet.add(char)
+                    self.char_alphabet.add(char)   
 
                 seqlen += 1
             else:
